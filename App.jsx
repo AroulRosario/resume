@@ -52,7 +52,7 @@ export default function App() {
   };
 
   return (
-    <div style={{ width: "100vw", height: "100vh", background: "#111" }}>
+    <div style={{ width: "100vw", height: "100vh", background: "#111", position: "relative" }}>
       <ToggleButtons mode={mode} setMode={setMode} />
       <Globe3D
         places={filteredPlaces}
