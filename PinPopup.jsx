@@ -1,30 +1,54 @@
 import React from "react";
+
 export default function PinPopup({ place, onClose, onNext }) {
+  if (!place) return null;
+
   return (
     <div style={{
       position: "absolute",
-      top: "20%",
       left: "50%",
+      top: "10%",
       transform: "translateX(-50%)",
-      zIndex: 20,
-      background: "#fff",
-      color: "#222",
-      padding: 20,
-      borderRadius: 12,
-      boxShadow: "0 0 20px #0008",
-      minWidth: 320,
-      textAlign: "center"
+      background: "#222",
+      color: "#fff",
+      padding: "24px",
+      borderRadius: "12px",
+      boxShadow: "0 2px 16px rgba(0,0,0,0.3)",
+      width: "320px",
+      zIndex: 10
     }}>
-      <h2>{place.name}</h2>
       <img
         src={place.img}
         alt={place.name}
-        style={{ width: "90%", borderRadius: 8, marginBottom: 10 }}
+        style={{ width: "100%", borderRadius: "8px", marginBottom: "12px" }}
       />
-      <p>{place.description}</p>
-      <div style={{ marginTop: 12 }}>
-        <button onClick={onClose} style={{ marginRight: 10 }}>Close</button>
-        <button onClick={onNext}>Next</button>
+      <h2 style={{ margin: "0 0 8px 0" }}>{place.name}</h2>
+      <p style={{ marginBottom: "16px" }}>{place.description}</p>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button
+          onClick={onClose}
+          style={{
+            background: "#555",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+            padding: "8px 16px"
+          }}
+        >
+          Close
+        </button>
+        <button
+          onClick={onNext}
+          style={{
+            background: "#3498db",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+            padding: "8px 16px"
+          }}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
