@@ -1,52 +1,31 @@
 import React, { useRef, useEffect } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Stars } from "@react-three/drei";
-import Pin from "./Pin";
-
-function Globe({ activePin, focusPin }) {
-  const meshRef = useRef();
-  useFrame(() => {
-    if (!activePin) {
-      meshRef.current.rotation.y += 0.003;
-    }
-    // Optional: animate to focusPin if activePin changes
-  });
-  return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[2, 64, 64]} />
-      <meshStandardMaterial
-        map={null}
-        color="#2a3d66"
-        wireframe={false}
-        roughness={0.7}
-      />
-    </mesh>
-  );
-}
+import Globe from "react-globe.gl";
 
 export default function Globe3D({ places, onPinClick, activePin }) {
+  const globeEl = useRef();
+
+  useEffect(() => {
+    // Auto-focus on active pin
+    if (activePin && globeEl.current) {
+      globeEl.current.pointOfView({ lat: activePin.lat, lng: activePin.lng, altitude: 1.5 }, 1000);
+    }
+  }, [activePin]);
+
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <Canvas camera={{ position: [0, 0, 7], fov: 50 }}>
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[5, 5, 5]} intensity={1.5} />
-        <Stars radius={100} depth={50} count={1000} factor={4} saturation={0} fade />
-        <Globe activePin={activePin} />
-        {places.map(place =>
-          <Pin
-            key={place.name}
-            place={place}
-            active={activePin && activePin.name === place.name}
-            onClick={() => onPinClick(place)}
-          />
-        )}
-        <OrbitControls
-          enableZoom={true}
-          enablePan={false}
-          enableRotate={!activePin}
-          autoRotate={false}
-        />
-      </Canvas>
+      <Globe
+        ref={globeEl}
+        globeImageUrl="//unpkg.com/three-globe/example/img/earth-dark.jpg"
+        pointsData={places}
+        pointLat="lat"
+        pointLng="lng"
+        pointAltitude={0.03}
+        pointColor={d => (d.type === "academic" ? "#3498db" : "#e67e22")}
+        pointRadius={0.15}
+        onPointClick={onPinClick}
+        width={window.innerWidth}
+        height={window.innerHeight}
+      />
     </div>
   );
 }
